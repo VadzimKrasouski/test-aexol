@@ -1,46 +1,52 @@
-export{}/*
-import React from 'react';
-import styled from '@emotion/styled';
-import { Head } from 'next/document';
+import styled from 'styled-components';
 
-export const siteTitle = 'Next.js Sample Website';
+import React from 'react';
+import Head from 'next/head'
+import Link from 'next/link';
+
+export const siteTitle = 'Test Website';
 
 interface LayoutProps {
-    home?: boolean;
     pageTitle?: string;
 }
 
-const Header = styled.header`
-    display: flex;
-    height: 150px;
-    width: 100%;
-    background-color: aliceblue;
-    align-items: center;
-    p {
-        margin-right: 25px;
-    }
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: aliceblue;
+`;
+
+const Nav = styled.nav`
+  max-width: 1600px;
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
 `;
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
+  top: 100px;
+  position: relative;
 `;
 
-export const Layout: React.FC<LayoutProps> = ({ children, home, pageTitle }) => {
+export const Layout: React.FC<LayoutProps> = ({children, pageTitle}) => {
     return (
-        <div>
+        <>
             <Head>
-                <title>{pageTitle ? pageTitle : 'Your Title'}</title>
+                <title>{pageTitle ? siteTitle + ' | ' + pageTitle : siteTitle}</title>
             </Head>
             <Header>
-                <p>Nav Link</p>
-                <p>Nav Link</p>
-                <p>Nav Link</p>
-                <p>Nav Link</p>
-                <p>Nav Link</p>
+                <Nav>
+                    <Link href='/'><a>Home</a></Link>
+                </Nav>
             </Header>
             <Container>{children}</Container>
-        </div>
+        </>
     );
-};*/
+};

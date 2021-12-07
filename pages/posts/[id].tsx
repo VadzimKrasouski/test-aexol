@@ -1,5 +1,12 @@
-export default function Post(){
+import { Layout } from '../../layouts/Layout';
+import { useRouter } from 'next/router';
+
+export default function Post() {
+    const router = useRouter()
+    const {id} = router.query
     return (
-       <h1>sfsf</h1>
+        <Layout pageTitle={`Post: ${id}`}>
+            <h1>Post: {id}</h1>
+        </Layout>
     );
 };
