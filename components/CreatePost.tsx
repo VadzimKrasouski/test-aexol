@@ -1,36 +1,35 @@
 import { CREATE_POST } from '../pages/api/posts';
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export const CreatePost = () => {
-    const [newPost, {loading, error}] = useMutation(CREATE_POST);
+    const [newPost, {loading, data}] = useMutation(CREATE_POST);
     const [title, setTitle] = useState('');
-    const [text, setText] = useState('');
-    if (loading) return 'Submitting...';
-    if (error) return `Submission error! ${error.message}`;
-    const addUser = (e) => {
+    const [body, setText] = useState('');
+    const addPost = (e: React.SyntheticEvent) => {
         e.preventDefault()
         newPost({
             variables: {
                 input: {
-                    username, age
+                    title, body
                 }
             }
         }).then(({data}) => {
             console.log(data)
-            setUsername('')
-            setAge(0)
+            setTitle('')
+            setText('')
         })
     }
+
 
     return (
         <div>
             <form>
-                <input value={title} onChange={e => setTitle(e.target.value)} type='text'/>
-                <input value={text} onChange={e => setText(e.target.value)} type='text'/>
-                <div>
-                    <button onClick={(e) => addPost(e)}>Создать</button>
-                </div>
+                <input placeholder='Title' value={title} onChange={e => setTitle(e.target.value)} type='text'/>
+                <input placeholder='write a text here' value={body} onChange={e => setText(e.target.value)}
+                       type='text'/>
+                <button disabled={loading} onClick={(e) => addPost(e)}>Create</button>
+                {data ? 'DONE' : undefined}
             </form>
         </div>
     );

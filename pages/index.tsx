@@ -1,10 +1,9 @@
-import type { GetStaticProps } from 'next'
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/posts';
-import { useState } from 'react';
+import { CreatePost } from '../components/CreatePost';
 
 const Main = styled.main`
   width: 90%;
@@ -73,52 +72,28 @@ interface IPost {
     body: string
     _typename: string
 }
+
 interface IPostsPage {
     data: IPost[]
 }
-interface HomeProps {
-    posts: IPostsPage
-}
+
 
 const Home = () => {
-    const { loading, error, data } = useQuery(GET_ALL_POSTS);
+    const {loading, error, data} = useQuery(GET_ALL_POSTS);
 
     if (error)
         return <div>Error loading posts.</div>;
     if (loading)
         return <div>Loading</div>;
 
-    const { posts } = data;
+    const {posts} = data;
     console.log(data)
-    // const [newPost] = useMutation(CREATE_USER)
-    // const [title, setTitle] = useState('')
-    // const addPost = (e) => {
-    //     e.preventDefault()
-    //     createPost({
-    //         variables: {
-    //             input: {
-    //                 username, age
-    //             }
-    //         }
-    //     }).then(({data}) => {
-    //         console.log(data)
-    //         setUsername('')
-    //         setAge(0)
-    //     })
-    // }
 
     return (
         <>
             <Layout pageTitle={'Home'}>
                 <Main>
-                   {/* <form>
-                        <input value={title} onChange={e => setTitle(e.target.value)} type="text"/>
-                        <input value={post} onChange={e => setPost(e.target.value)} type="text"/>
-                        <div>
-                            <button onClick={(e) => addPost(e)}>Create</button>
-                        </div>
-                    </form>*/}
-
+                    <CreatePost/>
                     <Title>Blog</Title>
                     <CardsList>{posts.data.map((post: any) => (
                         <Card key={post.id}>
