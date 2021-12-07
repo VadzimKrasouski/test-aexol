@@ -1,21 +1,20 @@
 import type { GetStaticProps } from 'next'
-import { gql } from '@apollo/client';
-import client from '../lib/apollo-client';
+import { gql, useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
+import { GET_ALL_POSTS } from './api/posts';
+import { useState } from 'react';
 
 const Main = styled.main`
   width: 90%;
   margin: 0 auto;
 `;
-
 const Title = styled.h1`
   margin: 1rem 0;
   font-size: 2rem;
   text-align: center;
 `;
-
 const CardsList = styled.ul`
   list-style: none;
   margin: 0 0 1em 0;
@@ -28,7 +27,6 @@ const CardsList = styled.ul`
     margin: 0;
   }
 `;
-
 const CardTitle = styled.h3`
   background-color: rgba(255, 108, 129, 0.3);
   color: #fff;
@@ -44,7 +42,6 @@ const CardTitle = styled.h3`
     margin: 0;
   }
 `;
-
 const Card = styled.li`
   background-color: rgba(250, 235, 215, 0.82);
   border: 1px solid #999;
@@ -62,8 +59,7 @@ const Card = styled.li`
     margin: 0;
   }
 `;
-
-const PostBody = styled.div`
+const CardBody = styled.div`
   padding: 0.8rem 1rem 0.2rem 1rem;
 
   & p {
@@ -77,25 +73,57 @@ interface IPost {
     body: string
     _typename: string
 }
-
 interface IPostsPage {
     data: IPost[]
 }
-
 interface HomeProps {
     posts: IPostsPage
 }
 
-const Home = ({posts}: HomeProps) => {
+const Home = () => {
+    const { loading, error, data } = useQuery(GET_ALL_POSTS);
+
+    if (error)
+        return <div>Error loading posts.</div>;
+    if (loading)
+        return <div>Loading</div>;
+
+    const { posts } = data;
+    console.log(data)
+    // const [newPost] = useMutation(CREATE_USER)
+    // const [title, setTitle] = useState('')
+    // const addPost = (e) => {
+    //     e.preventDefault()
+    //     createPost({
+    //         variables: {
+    //             input: {
+    //                 username, age
+    //             }
+    //         }
+    //     }).then(({data}) => {
+    //         console.log(data)
+    //         setUsername('')
+    //         setAge(0)
+    //     })
+    // }
+
     return (
         <>
             <Layout pageTitle={'Home'}>
                 <Main>
+                   {/* <form>
+                        <input value={title} onChange={e => setTitle(e.target.value)} type="text"/>
+                        <input value={post} onChange={e => setPost(e.target.value)} type="text"/>
+                        <div>
+                            <button onClick={(e) => addPost(e)}>Create</button>
+                        </div>
+                    </form>*/}
+
                     <Title>Blog</Title>
                     <CardsList>{posts.data.map((post: any) => (
                         <Card key={post.id}>
                             <Link href={`/posts/${post.id}`} passHref><CardTitle><a>{post.title}</a></CardTitle></Link>
-                            <PostBody><p>{post.body.slice(0, 50) + '...'}</p></PostBody>
+                            <CardBody><p>{post.body.slice(0, 50) + '...'}</p></CardBody>
                         </Card>
                     ))}</CardsList>
                 </Main>
@@ -106,24 +134,22 @@ const Home = ({posts}: HomeProps) => {
 
 export default Home
 
-export const getStaticProps: GetStaticProps = async () => {
-    const {data} = await client.query({
-        query: gql`
-        query GetAllPosts($options: PageQueryOptions) {
-        posts(options: $options) {
-             data {
-                id
-                title
-                body
-             }
-        }
-    }
-      `,
-    });
-
-    return {
-        props: {
-            posts: data.posts
-        },
-    };
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//     const {data, loading, error} = await client.query({
+//         query: GET_ALL_POSTS,
+//         variables: {
+//             options: {
+//                 paginate: {
+//                     page: 1,
+//                     limit: 10
+//                 }
+//             }
+//         }
+//     });
+//
+//     return {
+//         props: {
+//             posts: data.posts
+//         },
+//     };
+// };
