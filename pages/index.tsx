@@ -50,7 +50,7 @@ const Card = styled.li`
   display: grid;
   grid-template-rows: auto 1fr auto;
 
-  & :hover h3 {
+  & :hover h2 {
     transition: all .3s;
     background-color: rgba(255, 108, 129, 0.8);
   }
