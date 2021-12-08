@@ -21,7 +21,6 @@ const Title = styled.h1`
 export default function Post() {
     const router = useRouter()
     const {id} = router.query
-    console.log(id)
     const {loading, error, data} = useQuery(GET_ONE_POST, {
         variables: {postId: id}
     });

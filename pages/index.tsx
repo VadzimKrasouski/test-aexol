@@ -1,9 +1,10 @@
-import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { initializeApollo } from '../lib/apollo-client';
 
 const Main = styled.main`
   width: 90%;
@@ -74,15 +75,16 @@ interface IPost {
     _typename: string
 }
 
-const Home = () => {
-    const {loading, error, data} = useQuery(GET_ALL_POSTS);
+const Home = ({posts, loading, error}:InferGetStaticPropsType<typeof getStaticProps>) => {
+    //apollo hook
+    // const {loading, error, data} = useQuery(GET_ALL_POSTS);
+    // const {posts} = data;
 
     if (error)
         return <div>Error loading posts.</div>;
     if (loading)
         return <div>Loading</div>;
 
-    const {posts} = data;
 
     return (
         <>
@@ -104,18 +106,11 @@ const Home = () => {
 
 export default Home
 
-/*
 export const getStaticProps: GetStaticProps = async () => {
-    const {data, loading, error} = await client.query({
+    const apolloClient = initializeApollo()
+
+    const {data} = await apolloClient.query({
         query: GET_ALL_POSTS,
-        variables: {
-            options: {
-                paginate: {
-                    page: 1,
-                    limit: 10
-                }
-            }
-        }
     });
 
     return {
@@ -123,4 +118,4 @@ export const getStaticProps: GetStaticProps = async () => {
             posts: data.posts
         },
     };
-};*/
+};
