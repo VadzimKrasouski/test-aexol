@@ -1,7 +1,22 @@
 import { Layout } from '../../layouts/Layout';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import { GET_ONE_POST } from '../api/posts';
+import { GET_ONE_POST } from '../api/postsAPI';
+import styled from 'styled-components';
+
+const Main = styled.main`
+  width: 90%;
+  margin: 0 auto;
+
+  & p {
+    font-size: 1.5rem;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  margin: 2rem 0 3rem 0
+`
 
 export default function Post() {
     const router = useRouter()
@@ -20,9 +35,11 @@ export default function Post() {
     console.log(post)
 
     return (
-        <Layout pageTitle={`Post: ${id}`}>
-            <h1>Post: {post.title}</h1>
-            <p>{post.body}</p>
+        <Layout pageTitle={`Post: ${post.title}`}>
+            <Main>
+                <Title>Post: {post.title}</Title>
+                <p>{post.body}</p>
+            </Main>
         </Layout>
     );
 };

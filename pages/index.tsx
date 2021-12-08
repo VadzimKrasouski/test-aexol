@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
-import { GET_ALL_POSTS } from './api/posts';
+import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
 
 const Main = styled.main`
@@ -10,9 +10,10 @@ const Main = styled.main`
   margin: 0 auto;
 `;
 const Title = styled.h1`
-  margin: 1rem 0;
-  font-size: 2rem;
+  margin: 2rem 0 3rem 0;
+  font-size: 2.5rem;
   text-align: center;
+  text-decoration: underline;
 `;
 const CardsList = styled.ul`
   list-style: none;
@@ -26,7 +27,7 @@ const CardsList = styled.ul`
     margin: 0;
   }
 `;
-const CardTitle = styled.h3`
+const CardTitle = styled.h2`
   background-color: rgba(255, 108, 129, 0.3);
   color: #fff;
   margin: 0;
@@ -73,11 +74,6 @@ interface IPost {
     _typename: string
 }
 
-interface IPostsPage {
-    data: IPost[]
-}
-
-
 const Home = () => {
     const {loading, error, data} = useQuery(GET_ALL_POSTS);
 
@@ -87,7 +83,6 @@ const Home = () => {
         return <div>Loading</div>;
 
     const {posts} = data;
-    console.log(data)
 
     return (
         <>
@@ -95,7 +90,7 @@ const Home = () => {
                 <Main>
                     <CreatePost/>
                     <Title>Blog</Title>
-                    <CardsList>{posts.data.map((post: any) => (
+                    <CardsList>{posts.data.map((post: IPost) => (
                         <Card key={post.id}>
                             <Link href={`/posts/${post.id}`} passHref><CardTitle><a>{post.title}</a></CardTitle></Link>
                             <CardBody><p>{post.body.slice(0, 50) + '...'}</p></CardBody>
@@ -109,22 +104,23 @@ const Home = () => {
 
 export default Home
 
-// export const getStaticProps: GetStaticProps = async () => {
-//     const {data, loading, error} = await client.query({
-//         query: GET_ALL_POSTS,
-//         variables: {
-//             options: {
-//                 paginate: {
-//                     page: 1,
-//                     limit: 10
-//                 }
-//             }
-//         }
-//     });
-//
-//     return {
-//         props: {
-//             posts: data.posts
-//         },
-//     };
-// };
+/*
+export const getStaticProps: GetStaticProps = async () => {
+    const {data, loading, error} = await client.query({
+        query: GET_ALL_POSTS,
+        variables: {
+            options: {
+                paginate: {
+                    page: 1,
+                    limit: 10
+                }
+            }
+        }
+    });
+
+    return {
+        props: {
+            posts: data.posts
+        },
+    };
+};*/

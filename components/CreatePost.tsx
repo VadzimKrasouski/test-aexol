@@ -1,8 +1,14 @@
-import { CREATE_POST } from '../pages/api/posts';
-import { useMutation } from '@apollo/client';
 import React, { ChangeEvent, useState } from 'react';
+import { CREATE_POST } from '../pages/api/postsAPI';
+import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+`;
 const Input = styled.input.attrs(props => ({
     type: 'text',
     size: props.size || '1em',
@@ -18,11 +24,14 @@ const Button = styled.button.attrs(props => ({
 }))`
   display: inline-block;
   color: palevioletred;
-  font-size: 1em;
+  font-size: 1.1em;
   margin: 1em;
-  padding: 0.25em 1em;
+  padding: 0.6em 1em;
   border: 2px solid palevioletred;
   border-radius: 3px;
+`;
+const Status = styled.div`
+  background-color: rgba(255, 108, 129, 0.3);
 `;
 
 export const CreatePost = () => {
@@ -48,19 +57,19 @@ export const CreatePost = () => {
         } else {
             setStatus('Title and body are required');
         }
-    }
+    };
 
     const onKeyPressHandler = (e: KeyboardEvent) => {
         if (status !== null) {
             setStatus(null)
         }
         if (e.key === 'Enter') {
-            addPost();
+            addPost()
         }
-    }
+    };
 
     return (
-        <div>
+        <Container>
             <Input placeholder='Title'
                    value={title}
                    onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)}
@@ -71,7 +80,7 @@ export const CreatePost = () => {
                    onKeyPress={onKeyPressHandler}
             />
             <Button disabled={loading} onClick={addPost}>Create</Button>
-            {status}
-        </div>
+            <Status>{status}</Status>
+        </Container>
     );
 };

@@ -1,15 +1,15 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { useMemo } from 'react';
 
-let apolloClient;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 export const createApolloClient = () => new ApolloClient({
-    ssrMode: typeof window === "undefined",
-    uri: "https://graphqlzero.almansi.me/api",
+    ssrMode: typeof window === 'undefined',
+    uri: 'https://graphqlzero.almansi.me/api',
     cache: new InMemoryCache(),
 });
 
-export function initializeApollo(initialState = null) {
+export function initializeApollo(initialState: NormalizedCacheObject) {
     const _apolloClient = apolloClient ?? createApolloClient();
 
     // If your page has Next.js data fetching methods that use Apollo Client,
@@ -20,18 +20,18 @@ export function initializeApollo(initialState = null) {
 
         // Restore the cache using the data passed from
         // getStaticProps/getServerSideProps combined with the existing cached data
-        _apolloClient.cache.restore({ ...existingCache, ...initialState });
+        _apolloClient.cache.restore({...existingCache, ...initialState});
     }
 
     // For SSG and SSR always create a new Apollo Client
-    if (typeof window === "undefined") return _apolloClient;
+    if (typeof window === 'undefined') return _apolloClient;
 
     // Create the Apollo Client once in the client
     if (!apolloClient) apolloClient = _apolloClient;
     return _apolloClient;
 }
 
-export function useApollo(initialState) {
+export function useApollo(initialState: NormalizedCacheObject) {
     const store = useMemo(() => initializeApollo(initialState), [initialState]);
     return store;
 }

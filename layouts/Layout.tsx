@@ -18,16 +18,24 @@ const Header = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
+  z-index: 2;
   background-color: aliceblue;
 `;
-
 const Nav = styled.nav`
   max-width: 1600px;
   width: 90%;
   display: flex;
   justify-content: flex-start;
-`;
 
+  & a {
+    font-size: 1.5rem;
+
+    & :hover {
+      transition: all .3s;
+      background-color: rgba(255, 108, 129, 0.8);
+    }
+  }
+`;
 const Container = styled.div`
   max-width: 1600px;
   margin: 0 auto;
