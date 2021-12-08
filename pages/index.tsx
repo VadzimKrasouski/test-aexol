@@ -4,7 +4,8 @@ import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { initializeApollo } from '../lib/apollo-client';
+import { addApolloState, initializeApollo } from '../lib/apollo-client';
+import { useQuery } from '@apollo/client';
 
 const Main = styled.main`
   width: 90%;
@@ -75,15 +76,14 @@ interface IPost {
     _typename: string
 }
 
-const Home = ({posts, loading, error}:InferGetStaticPropsType<typeof getStaticProps>) => {
-    //apollo hook
-    // const {loading, error, data} = useQuery(GET_ALL_POSTS);
-    // const {posts} = data;
+const Home = () => {
+    const {loading, error, data} = useQuery(GET_ALL_POSTS);
+    const {posts} = data;
 
-    if (error)
-        return <div>Error loading posts.</div>;
     if (loading)
         return <div>Loading</div>;
+    if (error)
+        return <div>Error</div>;
 
 
     return (
@@ -109,13 +109,11 @@ export default Home
 export const getStaticProps: GetStaticProps = async () => {
     const apolloClient = initializeApollo()
 
-    const {data} = await apolloClient.query({
+    await apolloClient.query({
         query: GET_ALL_POSTS,
     });
-
-    return {
-        props: {
-            posts: data.posts
-        },
-    };
+    return addApolloState(apolloClient, {
+        props: {},
+        revalidate: 1,
+    })
 };
