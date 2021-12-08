@@ -24,6 +24,7 @@ const Button = styled.button.attrs(props => ({
 }))`
   display: inline-block;
   color: palevioletred;
+  background-color: aliceblue;
   font-size: 1.1em;
   margin: 1em;
   padding: 0.6em 1em;
