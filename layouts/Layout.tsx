@@ -20,6 +20,10 @@ const Header = styled.div`
   top: 0;
   z-index: 2;
   background-color: aliceblue;
+  
+  @media screen and (max-width: 800px) {
+    position: static;
+  }
 `;
 const Nav = styled.nav`
   max-width: 1600px;
@@ -41,6 +45,10 @@ const Container = styled.div`
   margin: 0 auto;
   top: 100px;
   position: relative;
+  
+  @media screen and (max-width: 800px) {
+    position: static;
+}
 `;
 
 export const Layout: React.FC<LayoutProps> = ({children, pageTitle}) => {
