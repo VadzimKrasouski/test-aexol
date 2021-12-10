@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Head from 'next/head'
 import Link from 'next/link';
-import { Loader } from '../components/Loader';
-import { useRouter } from 'next/router';
 
 export const siteTitle = 'Test Website';
 
@@ -55,42 +53,18 @@ const Container = styled.div`
 
 
 export const Layout: React.FC<LayoutProps> = ({children, pageTitle}) => {
-    const router = useRouter()
-    const [loading, setLoading] = useState(false);
-    useEffect(() => {
-        const handleStart = (url: any) => {
-            console.log(`Loading: ${url}`)
-            setLoading(true)
-        }
-        const handleStop = () => {
-            setLoading(false)
-        }
-
-        router.events.on('routeChangeStart', handleStart)
-        router.events.on('routeChangeComplete', handleStop)
-        router.events.on('routeChangeError', handleStop)
-
-        return () => {
-            router.events.off('routeChangeStart', handleStart)
-            router.events.off('routeChangeComplete', handleStop)
-            router.events.off('routeChangeError', handleStop)
-        }
-    }, [router])
     return (
         <>
             <Head>
                 <title>{pageTitle ? siteTitle + ' | ' + pageTitle : siteTitle}</title>
             </Head>
-            {!loading ? (
-                <>
-                    <Header>
-                        <Nav>
-                            <Link href='/'><a>Home</a></Link>
-                        </Nav>
-                    </Header>
-                    <Container>{children}</Container>
-                </>) : <Loader/>
-            }
+
+            <Header>
+                <Nav>
+                    <Link href='/'><a>Home</a></Link>
+                </Nav>
+            </Header>
+            <Container>{children}</Container>
         </>
     );
 };
