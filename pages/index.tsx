@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { GetStaticProps } from 'next';
 import { addApolloState, initializeApollo } from '../lib/apollo-client';
 import { useQuery } from '@apollo/client';
 
@@ -77,30 +77,22 @@ interface IPost {
 }
 
 const Home = () => {
-    const {loading, error, data} = useQuery(GET_ALL_POSTS);
+    const {data} = useQuery(GET_ALL_POSTS);
     const {posts} = data;
 
-    if (loading)
-        return <div>Loading</div>;
-    if (error)
-        return <div>Error</div>;
-
-
     return (
-        <>
-            <Layout pageTitle={'Home'}>
-                <Main>
-                    <CreatePost/>
-                    <Title>Blog</Title>
-                    <CardsList>{posts.data.map((post: IPost) => (
-                        <Card key={post.id}>
-                            <Link href={`/posts/${post.id}`} passHref><CardTitle><a>{post.title}</a></CardTitle></Link>
-                            <CardBody><p>{post.body.slice(0, 50) + '...'}</p></CardBody>
-                        </Card>
-                    ))}</CardsList>
-                </Main>
-            </Layout>
-        </>
+        <Layout pageTitle={'Home'}>
+            <Main>
+                <CreatePost/>
+                <Title>Blog</Title>
+                <CardsList>{posts.data.map((post: IPost) => (
+                    <Card key={post.id}>
+                        <Link href={`/posts/${post.id}`} passHref><CardTitle><a>{post.title}</a></CardTitle></Link>
+                        <CardBody><p>{post.body.slice(0, 50) + '...'}</p></CardBody>
+                    </Card>
+                ))}</CardsList>
+            </Main>
+        </Layout>
     )
 }
 
@@ -114,6 +106,5 @@ export const getStaticProps: GetStaticProps = async () => {
     });
     return addApolloState(apolloClient, {
         props: {},
-        revalidate: 1,
     })
 };

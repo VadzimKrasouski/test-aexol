@@ -25,14 +25,13 @@ export default function Post() {
         variables: {postId: id}
     });
 
-    if (error)
+    if (error) {
         return <div>Error loading posts.</div>;
-    if (loading)
+    }
+    if (loading) {
         return <div>Loading</div>;
-
+    }
     const {post} = data;
-    console.log(post)
-
     return (
         <Layout pageTitle={`Post: ${post.title}`}>
             <Main>
