@@ -106,5 +106,6 @@ export const getStaticProps: GetStaticProps = async () => {
     });
     return addApolloState(apolloClient, {
         props: {},
+
     })
 };
