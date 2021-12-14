@@ -1,13 +1,12 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../lib/apollo-client';
+import { client } from '../lib/apollo-client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Loader } from '../components/Loader';
 
 function MyApp({Component, pageProps}: AppProps) {
-    const apolloClient = useApollo(pageProps);
     const router = useRouter()
     const [loading, setLoading] = useState(false);
     useEffect(() => {
@@ -30,7 +29,7 @@ function MyApp({Component, pageProps}: AppProps) {
     }, [router])
 
     return (!loading ? (
-            <ApolloProvider client={apolloClient}>
+            <ApolloProvider client={client}>
                 <Component {...pageProps} />
             </ApolloProvider>) : <Loader/>
     )

@@ -18,26 +18,29 @@ const Title = styled.h1`
   margin: 2rem 0 3rem 0
 `
 
-export default function Post() {
+export default function Post(props: any) {
+
     const router = useRouter()
     const {id} = router.query
-    const {loading, error, data} = useQuery(GET_ONE_POST, {
+    /*const {loading, error, data} = useQuery(GET_ONE_POST, {
         variables: {postId: id}
-    });
+    });*/
 
-    if (error) {
+   /* if (error) {
         return <div>Error loading posts.</div>;
     }
     if (loading) {
         return <div>Loading</div>;
-    }
-    const {post} = data;
-    return (
-        <Layout pageTitle={`Post: ${post.title}`}>
+    }*/
+    console.log(props)
+    // const {post} = data.find((id: any) => id.id);
+
+    return (<div>123</div>
+       /* <Layout pageTitle={`Post: ${post.title}`}>
             <Main>
                 <Title>Post: {post.title}</Title>
                 <p>{post.body}</p>
             </Main>
-        </Layout>
+        </Layout>*/
     );
 };

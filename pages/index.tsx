@@ -4,8 +4,7 @@ import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
 import { GetStaticProps } from 'next';
-import { addApolloState, initializeApollo } from '../lib/apollo-client';
-import { useQuery } from '@apollo/client';
+import { client } from '../lib/apollo-client';
 
 const Main = styled.main`
   width: 90%;
@@ -76,16 +75,15 @@ interface IPost {
     _typename: string
 }
 
-const Home = () => {
-    const {data} = useQuery(GET_ALL_POSTS);
-    const {posts} = data;
-
+const Home = ({posts}:any) => {
+    const {postss} = posts;
+    console.log(posts)
     return (
         <Layout pageTitle={'Home'}>
             <Main>
                 <CreatePost/>
                 <Title>Blog</Title>
-                <CardsList>{posts.data.map((post: IPost) => (
+                <CardsList>{posts.map((post: IPost) => (
                     <Card key={post.id}>
                         <Link href={`/posts/${post.id}`} passHref><CardTitle><a>{post.title}</a></CardTitle></Link>
                         <CardBody><p>{post.body.slice(0, 50) + '...'}</p></CardBody>
@@ -99,13 +97,13 @@ const Home = () => {
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-    const apolloClient = initializeApollo()
 
-    await apolloClient.query({
+   const { data } = await client.query({
         query: GET_ALL_POSTS,
     });
-    return addApolloState(apolloClient, {
-        props: {},
-
-    })
+    console.log(data)
+    return {
+        props: {posts: data.posts.data},
+        revalidate: 10
+    }
 };
