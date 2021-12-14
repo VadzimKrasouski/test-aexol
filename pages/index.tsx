@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Layout } from '../layouts/Layout';
 import { GET_ALL_POSTS } from './api/postsAPI';
 import { CreatePost } from '../components/CreatePost';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { client } from '../lib/apollo-client';
 
 const Main = styled.main`
@@ -68,16 +68,14 @@ const CardBody = styled.div`
   }
 `;
 
-interface IPost {
+export interface IPost {
     id: string
     title: string
     body: string
     _typename: string
 }
 
-const Home = ({posts}:any) => {
-    const {postss} = posts;
-    console.log(posts)
+const Home = ({posts}: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (
         <Layout pageTitle={'Home'}>
             <Main>
@@ -97,11 +95,9 @@ const Home = ({posts}:any) => {
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-
-   const { data } = await client.query({
+    const {data} = await client.query({
         query: GET_ALL_POSTS,
-    });
-    console.log(data)
+    })
     return {
         props: {posts: data.posts.data},
         revalidate: 10
